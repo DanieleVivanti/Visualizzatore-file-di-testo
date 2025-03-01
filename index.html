@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizzatore File di Testo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #fileContent {
+            width: 100%;
+            min-height: 300px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .drop-zone.dragover {
+            background-color: #e1e1e1;
+            border-color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>Visualizzatore File di Testo</h1>
+    
+    <div class="drop-zone" id="dropZone">
+        Trascina qui il tuo file di testo o
+        <input type="file" id="fileInput" accept=".txt,.md,.csv,.json,.html,.css,.js">
+    </div>
+
+    <div id="fileContent"></div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileContent = document.getElementById('fileContent');
+
+        // Gestione del drag and drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                leggiFile(file);
+            }
+        });
+
+        // Gestione del caricamento tramite input
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                leggiFile(file);
+            }
+        });
+
+        function leggiFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fileContent.textContent = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html> 
